@@ -3,24 +3,29 @@ import Button from "./Button";
 
 export default function TextExpander({
   children,
-  expandButtonText,
-  collapseButtonText,
+  collapsedNumWords = 10,
+  expanded = false,
+  expandButtonText = "Expand Button Text",
+  collapseButtonText = "Collapse Button Text",
+  className = "",
+  color = "black",
+  textSize = 1,
 }) {
-  const [expanded, setExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(expanded);
   function handleClick() {
-    setExpanded(!expanded);
+    setIsExpanded(!isExpanded);
   }
 
-  const threshold = 10;
-  const text = children.split(" "); // this variable might not be needed
+  const collapsedText = children
+    .split(" ")
+    .slice(0, collapsedNumWords)
+    .join(" ");
 
-  const collapsedText = text.slice(0, threshold).join(" ");
-  console.log("here ", collapsedText);
   return (
-    <div>
-      {expanded ? children : `${collapsedText}...`}
-      <Button handleClick={handleClick}>
-        {expanded ? collapseButtonText : expandButtonText}
+    <div className={className}>
+      {isExpanded ? children : `${collapsedText}...`}
+      <Button handleClick={handleClick} textColor={color} textSize={textSize}>
+        {isExpanded ? collapseButtonText : expandButtonText}
       </Button>
     </div>
   );
